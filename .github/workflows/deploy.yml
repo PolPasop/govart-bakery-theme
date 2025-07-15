@@ -1,0 +1,23 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main   # branche à surveiller (à adapter)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Deploy via SFTP
+      uses: appleboy/scp-action@v0.1.6
+      with:
+        host: pinnemouche.space           # Ton serveur (adresse IP ou domaine)
+        username: ix4xj_govarje       # Ton user SSH
+        key: ${{ secrets.DEPLOY_KEY }} # Clé privée stockée dans GitHub Secrets
+        source: "./"  # dossier/fichiers à copier (ex: ./)
+        target: "/sites/shop.govart.be/wp-content/themes" # dossier cible sur le serveur

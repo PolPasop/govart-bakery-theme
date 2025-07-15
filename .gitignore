@@ -25,3 +25,9 @@ vendor/
 *.tar
 .idea/
 .vscode/
+
+deploy_key
+deploy_key.pub
+*.pem
+*.key
+secrets/
