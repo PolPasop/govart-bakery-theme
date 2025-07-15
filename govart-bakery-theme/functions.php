@@ -46,6 +46,11 @@ function ajouter_champ_date_retrait( $checkout ) {
 }
 */
 
+
+echo '<div style="border:2px solid red; padding:10px;">Test hook actif</div>';
+
+
+
 // Valider le champ à la commande
 add_action('woocommerce_checkout_process', 'verifier_date_retrait');
 function verifier_date_retrait() {
