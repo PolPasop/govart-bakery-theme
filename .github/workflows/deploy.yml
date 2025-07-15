@@ -20,4 +20,4 @@ jobs:
         username: ix4xj_govarje       # Ton user SSH
         key: ${{ secrets.DEPLOY_KEY }} # Clé privée stockée dans GitHub Secrets
         source: "./"  # dossier/fichiers à copier (ex: ./)
-        target: "/sites/shop.govart.be/wp-content/themes" # dossier cible sur le serveur
+        target: "/home/clients/15ba9ceaa2f1026ac3dfb12e4fe626e3/sites/shop.govart.be/wp-content/themes" # dossier cible sur le serveur
