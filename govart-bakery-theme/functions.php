@@ -30,6 +30,7 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
  */
 
 // Ajouter un champ "Date de retrait" au checkout WooCommerce
+/*
 add_action( 'woocommerce_after_order_notes', 'ajouter_champ_date_retrait' );
 function ajouter_champ_date_retrait( $checkout ) {
     echo '<div id="date_retrait_field"><h3>' . __('Date de retrait') . '</h3>';
@@ -43,6 +44,7 @@ function ajouter_champ_date_retrait( $checkout ) {
 
     echo '</div>';
 }
+*/
 
 // Valider le champ à la commande
 add_action('woocommerce_checkout_process', 'verifier_date_retrait');
