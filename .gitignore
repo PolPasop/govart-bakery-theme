@@ -1,0 +1,27 @@
+# WordPress core files
+/wp-admin/
+/wp-includes/
+index.php
+license.txt
+readme.html
+wp-*.php
+
+# Contenu dynamique
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/upgrade/
+
+# Système et environnement
+.env
+*.log
+*.sql
+.DS_Store
+Thumbs.db
+node_modules/
+vendor/
+
+# Sauvegardes et configs locales
+*.zip
+*.tar
+.idea/
+.vscode/
