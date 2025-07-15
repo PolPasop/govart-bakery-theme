@@ -68,3 +68,9 @@ function afficher_date_retrait_admin($order){
         echo '<p><strong>Date de retrait :</strong> ' . esc_html( $date ) . '</p>';
     }
 }
+
+add_action( 'woocommerce_after_order_notes', 'ajouter_champ_date_retrait' );
+function ajouter_champ_date_retrait( $checkout ) {
+    echo '<div style="border:2px solid red;padding:10px;">HOOK actif</div>';
+    // ... le reste du champ
+}
