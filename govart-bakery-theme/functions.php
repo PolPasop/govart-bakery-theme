@@ -32,7 +32,6 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
  add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field_script' );
 
  function enqueue_custom_checkout_field_script() {
-     // Charge uniquement sur la page checkout avec les blocks
      if ( is_checkout() && function_exists( 'is_checkout_block_rendering' ) && is_checkout_block_rendering() ) {
          wp_enqueue_script(
              'govart-checkout-custom',
@@ -43,6 +42,4 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
          );
      }
  }
- 
-
 
