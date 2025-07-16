@@ -29,55 +29,37 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
  * --- AJOUTER LE CHAMP DATE DE RETRAIT WOOCOMMERCE ---
  */
 
-// Ajouter un champ "Date de retrait" au checkout WooCommerce
-/*
-add_action( 'woocommerce_after_order_notes', 'ajouter_champ_date_retrait' );
-function ajouter_champ_date_retrait( $checkout ) {
-    echo '<div id="date_retrait_field"><h3>' . __('Date de retrait') . '</h3>';
+ add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field' );
+ function enqueue_custom_checkout_field() {
+     if ( is_checkout() && function_exists( 'is_checkout_block' ) && is_checkout_block() ) {
+         wp_enqueue_script(
+             'custom-checkout-block',
+             get_stylesheet_directory_uri() . '/assets/js/checkout-custom.js',
+             [ 'wp-i18n', 'wp-element', 'wp-hooks', 'wc-blocks-checkout' ],
+             '1.0',
+             true
+         );
+     }
+ }
 
-    woocommerce_form_field( 'date_retrait', array(
-        'type'          => 'date',
-        'class'         => array('form-row-wide'),
-        'label'         => __('Choisissez votre date de retrait'),
-        'required'      => true,
-    ), $checkout->get_value( 'date_retrait' ));
-
-    echo '</div>';
-}
-*/
-
-
-echo '<div style="border:2px solid red; padding:10px;">Test hook actif</div>';
-
-
-
-// Valider le champ à la commande
-add_action('woocommerce_checkout_process', 'verifier_date_retrait');
-function verifier_date_retrait() {
-    if ( empty( $_POST['date_retrait'] ) ) {
-        wc_add_notice( __( 'Merci de choisir une date de retrait.' ), 'error' );
+// Sauvegarde la date dans la commande
+add_action( 'woocommerce_checkout_create_order', 'sauvegarder_date_retrait_blocks', 10, 2 );
+function sauvegarder_date_retrait_blocks( $order, $data ) {
+    if ( isset( $data['date_retrait'] ) ) {
+        $order->update_meta_data( '_date_retrait', sanitize_text_field( $data['date_retrait'] ) );
     }
 }
 
-// Sauvegarder la date de retrait dans la commande
-add_action( 'woocommerce_checkout_update_order_meta', 'enregistrer_date_retrait' );
-function enregistrer_date_retrait( $order_id ) {
-    if ( ! empty( $_POST['date_retrait'] ) ) {
-        update_post_meta( $order_id, '_date_retrait', sanitize_text_field( $_POST['date_retrait'] ) );
-    }
-}
-
-// Afficher la date de retrait dans l'admin
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'afficher_date_retrait_admin', 10, 1 );
 function afficher_date_retrait_admin($order){
-    $date = get_post_meta( $order->get_id(), '_date_retrait', true );
-    if ($date) {
+    $date = $order->get_meta( '_date_retrait' );
+    if ( $date ) {
         echo '<p><strong>Date de retrait :</strong> ' . esc_html( $date ) . '</p>';
     }
 }
 
-add_action( 'woocommerce_after_order_notes', 'ajouter_champ_date_retrait' );
-function ajouter_champ_date_retrait( $checkout ) {
-    echo '<div style="border:2px solid red;padding:10px;">HOOK actif</div>';
-    // ... le reste du champ
-}
+add_action('woocommerce_store_api_checkout_order_processed', function( $order, $request ) {
+    if ( empty( $request['date_retrait'] ) ) {
+        throw new \WC_REST_Exception( 'woocommerce_invalid_date_retrait', __( 'Veuillez choisir une date de retrait.' ), 400 );
+    }
+}, 10, 2 );
