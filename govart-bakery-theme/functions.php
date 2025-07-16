@@ -29,12 +29,13 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
  * --- AJOUTER LE CHAMP DATE DE RETRAIT WOOCOMMERCE ---
  */
 
+ add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field_script' );
 
- add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field' );
- function enqueue_custom_checkout_field() {
+ function enqueue_custom_checkout_field_script() {
+     // Charge uniquement sur la page checkout avec les blocks
      if ( is_checkout() && function_exists( 'is_checkout_block_rendering' ) && is_checkout_block_rendering() ) {
          wp_enqueue_script(
-             'custom-checkout-block',
+             'govart-checkout-custom',
              get_stylesheet_directory_uri() . '/assets/js/checkout-custom.js',
              [ 'wp-i18n', 'wp-element', 'wp-hooks', 'wc-blocks-checkout' ],
              '1.0',
@@ -42,28 +43,6 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
          );
      }
  }
-
-// Sauvegarde la date dans la commande
-add_action( 'woocommerce_checkout_create_order', 'sauvegarder_date_retrait_blocks', 10, 2 );
-function sauvegarder_date_retrait_blocks( $order, $data ) {
-    if ( isset( $data['date_retrait'] ) ) {
-        $order->update_meta_data( '_date_retrait', sanitize_text_field( $data['date_retrait'] ) );
-    }
-}
-
-add_action( 'woocommerce_admin_order_data_after_billing_address', 'afficher_date_retrait_admin', 10, 1 );
-function afficher_date_retrait_admin($order){
-    $date = $order->get_meta( '_date_retrait' );
-    if ( $date ) {
-        echo '<p><strong>Date de retrait :</strong> ' . esc_html( $date ) . '</p>';
-    }
-}
-
-add_action('woocommerce_store_api_checkout_order_processed', function( $order, $request ) {
-    if ( empty( $request['date_retrait'] ) ) {
-        throw new \WC_REST_Exception( 'woocommerce_invalid_date_retrait', __( 'Veuillez choisir une date de retrait.' ), 400 );
-    }
-}, 10, 2 );
-
+ 
 
 
