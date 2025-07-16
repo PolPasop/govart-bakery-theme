@@ -63,3 +63,18 @@ add_action('woocommerce_store_api_checkout_order_processed', function( $order, $
         throw new \WC_REST_Exception( 'woocommerce_invalid_date_retrait', __( 'Veuillez choisir une date de retrait.' ), 400 );
     }
 }, 10, 2 );
+
+
+
+add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field' );
+function enqueue_custom_checkout_field() {
+    if ( is_checkout() && function_exists( 'is_checkout_block_rendering' ) && is_checkout_block_rendering() ) {
+        wp_enqueue_script(
+            'custom-checkout-block',
+            get_stylesheet_directory_uri() . '/assets/js/checkout-custom.js',
+            [ 'wp-i18n', 'wp-element', 'wp-hooks', 'wc-blocks-checkout' ],
+            '1.0',
+            true
+        );
+    }
+}

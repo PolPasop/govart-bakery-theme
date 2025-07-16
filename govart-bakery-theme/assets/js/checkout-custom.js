@@ -1,6 +1,8 @@
 const { __ } = wp.i18n;
 const { addFilter } = wp.hooks;
 
+console.log('JS personnalisé chargé 🎉');
+
 const customCheckoutField = ( fields ) => {
 	fields.push({
 		name: 'date_retrait',
@@ -17,3 +19,4 @@ addFilter(
 	'govart-bakery-theme/custom-date-retrait',
 	customCheckoutField
 );
+
