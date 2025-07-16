@@ -29,9 +29,10 @@ add_action( 'wp_enqueue_scripts', 'child_enqueue_styles', 15 );
  * --- AJOUTER LE CHAMP DATE DE RETRAIT WOOCOMMERCE ---
  */
 
+
  add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field' );
  function enqueue_custom_checkout_field() {
-     if ( is_checkout() && function_exists( 'is_checkout_block' ) && is_checkout_block() ) {
+     if ( is_checkout() && function_exists( 'is_checkout_block_rendering' ) && is_checkout_block_rendering() ) {
          wp_enqueue_script(
              'custom-checkout-block',
              get_stylesheet_directory_uri() . '/assets/js/checkout-custom.js',
@@ -66,15 +67,3 @@ add_action('woocommerce_store_api_checkout_order_processed', function( $order, $
 
 
 
-add_action( 'enqueue_block_assets', 'enqueue_custom_checkout_field' );
-function enqueue_custom_checkout_field() {
-    if ( is_checkout() && function_exists( 'is_checkout_block_rendering' ) && is_checkout_block_rendering() ) {
-        wp_enqueue_script(
-            'custom-checkout-block',
-            get_stylesheet_directory_uri() . '/assets/js/checkout-custom.js',
-            [ 'wp-i18n', 'wp-element', 'wp-hooks', 'wc-blocks-checkout' ],
-            '1.0',
-            true
-        );
-    }
-}
